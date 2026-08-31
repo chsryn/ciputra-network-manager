@@ -1,4 +1,4 @@
-git status# 📱 Ciputra Network Manager
+# 📱 Ciputra Network Manager
 
 **Ciputra Network Manager** is a Flutter-based application designed to help manage member networks and organizational relationships efficiently.
 
