@@ -1,4 +1,4 @@
-# mlm_member
+# mlm-member-project
 
 A new Flutter project.
 
