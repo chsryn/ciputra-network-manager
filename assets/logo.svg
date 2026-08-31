@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Latar Belakang Kotak (Putih Bersih) untuk App Icon -->
+  
+  <!-- Definisi Gradien dan Bayangan (Apple Glassmorphism Style) -->
+  <defs>
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0EA5E9" /> <!-- Diamond Cyan -->
+      <stop offset="50%" stop-color="#3525CD" /> <!-- Primary Blue -->
+      <stop offset="100%" stop-color="#0EA5E9" /> <!-- Diamond Cyan -->
+    </linearGradient>
+    
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#3525CD" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Grup Utama (Huruf C Geometris) dengan Bayangan Halus -->
+  <g filter="url(#softShadow)">
+    
+    <!-- Garis Penghubung (Jejaring Network) -->
+    <path d="M 680 300 L 380 512 L 680 724" 
+          fill="none" 
+          stroke="url(#lineGrad)" 
+          stroke-width="60" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    
+    <!-- Titik Atas (Upline) -->
+    <circle cx="680" cy="300" r="70" fill="#0EA5E9"/>
+    <!-- Titik Tengah (Konektor Utama) -->
+    <circle cx="380" cy="512" r="85" fill="#3525CD"/>
+    <!-- Titik Bawah (Downline) -->
+    <circle cx="680" cy="724" r="70" fill="#0EA5E9"/>
+    
+    <!-- Aksen Menyala (Lampu Putih di Dalam Titik) -->
+    <circle cx="680" cy="300" r="20" fill="#FFFFFF"/>
+    <circle cx="380" cy="512" r="25" fill="#FFFFFF"/>
+    <circle cx="680" cy="724" r="20" fill="#FFFFFF"/>
+    
+  </g>
+</svg>
