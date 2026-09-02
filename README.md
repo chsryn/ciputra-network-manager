@@ -8,7 +8,6 @@ The application provides a modern and user-friendly interface for managing membe
 
 - 👥 Member Management
 - 🌐 Network Management
-- 🔐 User Authentication
 - 📊 Dashboard Overview
 - 🔎 Search and Filter Members
 - 📱 Responsive User Interface
