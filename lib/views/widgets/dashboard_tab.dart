@@ -426,6 +426,8 @@ class _DashboardTabState extends State<DashboardTab> {
                     children: [
                       Text(
                         member.fullName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -436,19 +438,24 @@ class _DashboardTabState extends State<DashboardTab> {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: kBackground,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              'ID: ${member.memberId}',
-                              style: GoogleFonts.jetBrainsMono(
-                                fontSize: 11,
-                                color: kTextVariant,
-                                fontWeight: FontWeight.w600,
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: kBackground,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                'ID: ${member.memberId}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.jetBrainsMono(
+                                  fontSize: 11,
+                                  color: kTextVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
@@ -470,19 +477,24 @@ class _DashboardTabState extends State<DashboardTab> {
                     ],
                   ),
                 ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: rankColor.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(9999),
-                  ),
-                  child: Text(
-                    member.rankLevel,
-                    style: GoogleFonts.plusJakartaSans(
-                      color: rankColor,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: rankColor.withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(9999),
+                    ),
+                    child: Text(
+                      member.rankLevel,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.plusJakartaSans(
+                        color: rankColor,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                 ),

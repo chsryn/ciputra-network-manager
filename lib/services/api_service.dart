@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/member.dart';
 
 class ApiService {
-  static const String _scriptUrl =
-      'https://script.google.com/macros/s/AKfycbxipTrsfgS0obQB5aLIaJw9TgPJLNRM_DrKGoQGCH96FhOs5uLoHqMDge4NUHvqcwrPGg/exec';
+  static String get _scriptUrl => dotenv.env['SCRIPT_URL'] ?? '';
 
   /// Fetches all members from the Google Apps Script endpoint.
   Future<List<Member>> fetchMembers() async {

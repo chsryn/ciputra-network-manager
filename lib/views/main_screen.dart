@@ -45,7 +45,6 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
         title: Row(
-          mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
               'assets/logo_ui.png',
@@ -54,13 +53,17 @@ class _MainScreenState extends State<MainScreen> {
               fit: BoxFit.contain,
             ),
             const SizedBox(width: 12),
-            Text(
-              'Ciputra Network Manager',
-              style: GoogleFonts.outfit(
-                fontWeight: FontWeight.w800,
-                fontSize: 22,
-                color: kTextMain,
-                letterSpacing: -0.8,
+            Expanded(
+              child: Text(
+                'Ciputra Network Manager',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.outfit(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 22,
+                  color: kTextMain,
+                  letterSpacing: -0.8,
+                ),
               ),
             ),
           ],

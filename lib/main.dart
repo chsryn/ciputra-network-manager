@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:device_preview/device_preview.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -7,14 +7,12 @@ import 'providers/member_provider.dart';
 import 'utils/constants.dart';
 import 'views/main_screen.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(
-    DevicePreview(
-      enabled: true,
-      builder: (context) => ChangeNotifierProvider(
-        create: (_) => MemberProvider(),
-        child: const MyApp(),
-      ),
+    ChangeNotifierProvider(
+      create: (_) => MemberProvider(),
+      child: const MyApp(),
     ),
   );
 }
@@ -27,9 +25,7 @@ class MyApp extends StatelessWidget {
     final textTheme = GoogleFonts.plusJakartaSansTextTheme();
 
     return MaterialApp(
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      title: 'Ciputra Network',
+      title: 'Ciputra Network Manager',
       debugShowCheckedModeBanner: false,
       scrollBehavior: AppScrollBehavior(),
       theme: ThemeData(

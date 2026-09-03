@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../models/member.dart';
+import '../providers/member_provider.dart';
 import '../services/api_service.dart';
 import '../utils/constants.dart';
 
@@ -179,6 +181,26 @@ class _FormMemberPageState extends State<FormMemberPage> {
       return;
     }
 
+    // Upline harus valid jika diisi (autocomplete 5, ID - Nama)
+    if (_uplineController.text.isNotEmpty) {
+      final allMembers = context.read<MemberProvider>().allMembers;
+      final exists =
+          allMembers.any((m) => m.memberId == _uplineController.text);
+      if (!exists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Upline ID tidak ditemukan. Pilih dari daftar rekomendasi.',
+              style: GoogleFonts.plusJakartaSans(fontSize: 13),
+            ),
+            backgroundColor: kError,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+    }
+
     setState(() => _isLoading = true);
 
     try {
@@ -284,6 +306,154 @@ class _FormMemberPageState extends State<FormMemberPage> {
                     color: kTextVariant, fontSize: 14),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Upline Autocomplete (ID - Nama, take 5, ringan) ───────
+  Widget _buildUplineAutocomplete() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 8),
+            child: Text(
+              'Upline ID',
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: kTextMain,
+              ),
+            ),
+          ),
+          Autocomplete<Member>(
+            displayStringForOption: (Member m) => m.memberId,
+            optionsBuilder: (TextEditingValue v) {
+              if (v.text.isEmpty) return const Iterable<Member>.empty();
+              final q = v.text.toLowerCase();
+              // ponytail: O(n) sync filter <1k, tambah debounce jika >5k/API
+              final all = context.read<MemberProvider>().allMembers;
+              return all
+                  .where((m) =>
+                      m.memberId.toLowerCase().contains(q) ||
+                      m.fullName.toLowerCase().contains(q))
+                  .take(5);
+            },
+            optionsMaxHeight: 200,
+            onSelected: (Member m) {
+              // pilih tanpa ketik lengkap
+              _uplineController.text = m.memberId;
+            },
+            fieldViewBuilder:
+                (BuildContext ctx, TextEditingController fieldCtrl, FocusNode fieldNode, VoidCallback onFieldSubmitted) {
+              // sync initial value (edit mode) ke fieldCtrl
+              if (fieldCtrl.text.isEmpty && _uplineController.text.isNotEmpty) {
+                fieldCtrl.text = _uplineController.text;
+                fieldCtrl.selection = TextSelection.fromPosition(
+                  TextPosition(offset: fieldCtrl.text.length),
+                );
+              }
+              return Container(
+                decoration: BoxDecoration(
+                  color: kSurface,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: kOutline),
+                  boxShadow: kAppleShadow,
+                ),
+                child: TextField(
+                  controller: fieldCtrl,
+                  focusNode: fieldNode,
+                  onChanged: (v) => _uplineController.text = v,
+                  onSubmitted: (v) => onFieldSubmitted(),
+                  style: GoogleFonts.plusJakartaSans(
+                    color: kTextMain,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: const Icon(Icons.account_tree_outlined, color: kTextVariant, size: 22),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    hintText: 'Cari ID/Nama Upline',
+                    hintStyle: GoogleFonts.plusJakartaSans(color: kTextVariant, fontSize: 14),
+                  ),
+                ),
+              );
+            },
+            optionsViewBuilder: (BuildContext ctx, AutocompleteOnSelected<Member> onSelected, Iterable<Member> opts) {
+              return Align(
+                alignment: Alignment.topLeft,
+                child: Material(
+                  elevation: 4,
+                  color: kSurface,
+                  borderRadius: BorderRadius.circular(16),
+                  shadowColor: Colors.black12,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: kSurface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: kOutline),
+                      boxShadow: kAppleShadow,
+                    ),
+                    constraints: const BoxConstraints(maxHeight: 200),
+                    width: MediaQuery.of(ctx).size.width - 48,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      shrinkWrap: true,
+                      itemCount: opts.length,
+                      itemBuilder: (BuildContext c, int i) {
+                        final Member m = opts.elementAt(i);
+                        return InkWell(
+                          onTap: () => onSelected(m),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color: kPrimary.withValues(alpha: 0.08),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Center(
+                                    child: Text(m.initial, style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w800, color: kPrimary)),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(m.memberId, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.jetBrainsMono(fontSize: 12, fontWeight: FontWeight.w700, color: kTextMain)),
+                                      const SizedBox(height: 2),
+                                      Text(m.fullName, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w500, color: kTextVariant)),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: getRankColor(m.rankLevel).withValues(alpha: 0.10),
+                                    borderRadius: BorderRadius.circular(9999),
+                                  ),
+                                  child: Text(m.rankLevel, style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w700, color: getRankColor(m.rankLevel))),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -446,7 +616,7 @@ class _FormMemberPageState extends State<FormMemberPage> {
                   _buildSectionHeader('Data Utama', Icons.person_rounded),
 
                   _buildPillInput(_memberIdController, 'Member ID',
-                      Icons.badge_outlined, 'Contoh: NIK/KTP',
+                      Icons.badge_outlined, 'Contoh: NIK atau ID Member',
                       enabled: !isEditMode),
                   _buildPillInput(_fullNameController, 'Nama Lengkap',
                       Icons.person_outline, 'Masukkan nama sesuai KTP'),
@@ -458,8 +628,7 @@ class _FormMemberPageState extends State<FormMemberPage> {
                       type: TextInputType.phone),
                   _buildPillInput(_referralCodeController, 'Kode Referal',
                       Icons.qr_code_rounded, 'Masukkan kode referal'),
-                  _buildPillInput(_uplineController, 'Upline ID',
-                      Icons.account_tree_outlined, 'Kosongkan jika Upline'),
+                  _buildUplineAutocomplete(),
                   _buildPillInput(
                       _addressController,
                       'Alamat Lengkap',

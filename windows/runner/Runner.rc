@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "mlm_member" "\0"
+            VALUE "FileDescription", "Ciputra Network Manager" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "mlm_member" "\0"
+            VALUE "InternalName", "Ciputra Network Manager" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "mlm_member.exe" "\0"
-            VALUE "ProductName", "mlm_member" "\0"
+            VALUE "ProductName", "Ciputra Network Manager" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

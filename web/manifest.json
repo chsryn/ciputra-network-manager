@@ -1,11 +1,11 @@
 {
-    "name": "mlm_member",
-    "short_name": "mlm_member",
+    "name": "Ciputra Network Manager",
+    "short_name": "Ciputra",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Ciputra Network Manager - MLM member network management app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
